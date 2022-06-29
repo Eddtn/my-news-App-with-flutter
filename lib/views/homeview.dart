@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:my_flutter_news_app/models/model.dart';
+import 'package:my_flutter_news_app/services/news_service.dart';
 import 'package:my_flutter_news_app/views/detail_page.dart';
 import 'package:my_flutter_news_app/widgets/newslist.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -11,6 +13,30 @@ class HomeViewPage extends StatefulWidget {
 }
 
 class _HomeViewPageState extends State<HomeViewPage> {
+  List<Article> news = [];
+  bool isLoaded = false;
+
+  @override
+  void initState() {
+    getnews();
+    super.initState();
+  }
+
+  getnews() async {
+    try {
+      setState(() {
+        isLoaded = true;
+      });
+      final articles = NewsService();
+      news = await articles.getnews();
+    } catch (e) {
+      print(e);
+      setState(() {
+        isLoaded = false;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
